@@ -1,12 +1,14 @@
 let shape = 'rectangle';
 let rectangleDimensions = [100, 100];
 let rectangleInputs = [];
-let tShapeDimensions = [50, 20, 50, 20, 25]; // Adjusted tShape dimensions
+let tShapeDimensions = [50, 20, 40, 50, 25];
 let tShapeInputs = [];
-let uShapeDimensions = [100, 50, 100, 50, 100, 50]; // Adjusted uShape dimensions
+let uShapeDimensions = [100, 90, 100, 50, 100, 90]; // Adjusted uShape dimensions
 let uShapeInputs = []; // Adjusted uShape inputs
-let lShapeDimensions = [100, 50, 10, 100]; // Adjusted lShape dimensions
-let lShapeInputs = []; // Adjusted lShape inputs
+let lShapeDimensions = [100, 50, 10, 100];
+let lShapeInputs = [];
+let hMirror = false;
+let vMirror = false;
 
 function setup() {
   createCanvas(800, 600);
@@ -63,6 +65,20 @@ function setup() {
     lShapeInputs.push({label: lShapeLabel, input: lShapeDimensionInput});
   }
 
+  // Create horizontal mirror button
+  let hMirrorButton = createButton('Mirror Horizontally');
+  hMirrorButton.position(10, 300);
+  hMirrorButton.mousePressed(() => {
+    hMirror = !hMirror;
+  });
+
+  // Create vertical mirror button
+  let vMirrorButton = createButton('Mirror Vertically');
+  vMirrorButton.position(130, 300);
+  vMirrorButton.mousePressed(() => {
+    vMirror = !vMirror;
+  });
+
   updateInputVisibility();
 }
 
@@ -87,31 +103,41 @@ function updateInputVisibility() {
 function draw() {
   background(220);
   fill(255); // Set the fill color
-  stroke(25); // Set the stroke color to match the fill color
+  stroke(255); // Set the stroke color to match the fill color
+
+  push();
+  translate(width / 2, height / 2);
+  if (hMirror) {
+    scale(-1, 1);
+  }
+  if (vMirror) {
+    scale(1, -1);
+  }
 
   if(shape === 'rectangle') {
-    let x = width / 2 - rectangleDimensions[0] / 2;
-    let y = height / 2 - rectangleDimensions[1] / 2;
+    let x = -rectangleDimensions[0] / 2;
+    let y = -rectangleDimensions[1] / 2;
     rect(x, y, rectangleDimensions[0], rectangleDimensions[1]);
   } else if(shape === 'tShape') {
-    let x = width / 2 - (tShapeDimensions[0] + tShapeDimensions[1] + tShapeDimensions[3]) / 2;
-    let y = height / 2 - (tShapeDimensions[2] + tShapeDimensions[4]) / 2;
+    let x = -(tShapeDimensions[0] + tShapeDimensions[1] + tShapeDimensions[3]) / 2;
+    let y = -(tShapeDimensions[2] + tShapeDimensions[4]) / 2;
     rect(x, y + tShapeDimensions[2], tShapeDimensions[0], tShapeDimensions[4]);
     rect(x + tShapeDimensions[0], y, tShapeDimensions[1], tShapeDimensions[2] + tShapeDimensions[4]);
     rect(x + tShapeDimensions[0] + tShapeDimensions[1], y + tShapeDimensions[2], tShapeDimensions[3], tShapeDimensions[4]);
   } else if(shape === 'uShape') {
-    let x = width / 2 - (uShapeDimensions[0] + uShapeDimensions[2] + uShapeDimensions[4]) / 2;
-    let y = height / 2 - Math.max(uShapeDimensions[1], uShapeDimensions[3], uShapeDimensions[5]) / 2;
+    let x = -(uShapeDimensions[0] + uShapeDimensions[2] + uShapeDimensions[4]) / 2;
+    let y = -Math.max(uShapeDimensions[1], uShapeDimensions[3], uShapeDimensions[5]) / 2;
     rect(x, y, uShapeDimensions[0], uShapeDimensions[1]);
     rect(x + uShapeDimensions[0], y, uShapeDimensions[2], uShapeDimensions[3]);
     rect(x + uShapeDimensions[0] + uShapeDimensions[2], y, uShapeDimensions[4], uShapeDimensions[5]);
   } else if(shape === 'lShape') {
-    let x = width / 2 - lShapeDimensions[0] / 2;
-    let y = height / 2 - (lShapeDimensions[1] + lShapeDimensions[3]) / 2;
+    let x = -lShapeDimensions[0] / 2;
+    let y = -(lShapeDimensions[1] + lShapeDimensions[3]) / 2;
     rect(x, y + lShapeDimensions[3], lShapeDimensions[0], lShapeDimensions[1]);
     rect(x, y, lShapeDimensions[2], lShapeDimensions[3]);
   }
-}
 
+  pop();
+}
 
 
