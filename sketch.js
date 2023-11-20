@@ -5,7 +5,7 @@ let tShapeDimensions = [50, 20, 50, 20, 25]; // Adjusted tShape dimensions
 let tShapeInputs = [];
 let uShapeDimensions = [100, 50, 100, 50, 100, 50]; // Adjusted uShape dimensions
 let uShapeInputs = []; // Adjusted uShape inputs
-let lShapeDimensions = [100, 50, 100, 50]; // Adjusted lShape dimensions
+let lShapeDimensions = [100, 50, 10, 100]; // Adjusted lShape dimensions
 let lShapeInputs = []; // Adjusted lShape inputs
 
 function setup() {
