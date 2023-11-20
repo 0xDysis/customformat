@@ -3,10 +3,10 @@ let rectangleDimensions = [100, 100];
 let rectangleInputs = [];
 let tShapeDimensions = [50, 20, 50, 20, 25]; // Adjusted tShape dimensions
 let tShapeInputs = [];
-let uShapeDimensions = [100, 100, 100, 50, 100, 100]; // Adjusted uShape dimensions
+let uShapeDimensions = [100, 50, 100, 50, 100, 50]; // Adjusted uShape dimensions
 let uShapeInputs = []; // Adjusted uShape inputs
-let lShapeDimensions = [100, 50, 100];
-let lShapeInputs = [];
+let lShapeDimensions = [100, 50, 100, 50]; // Adjusted lShape dimensions
+let lShapeInputs = []; // Adjusted lShape inputs
 
 function setup() {
   createCanvas(800, 600);
@@ -53,11 +53,14 @@ function setup() {
   }
 
   // Create input fields for lShape
-  for (let i = 0; i < 3; i++) {
+  let lShapeLabels = ['Base Width', 'Base Height', 'Stacked Rectangle Width', 'Stacked Rectangle Height'];
+  for (let i = 0; i < 4; i++) {
+    let lShapeLabel = createElement('label', lShapeLabels[i]);
+    lShapeLabel.position(10, 100 + i * 30);
     let lShapeDimensionInput = createInput(lShapeDimensions[i].toString());
-    lShapeDimensionInput.position(10, 40 + i * 30);
+    lShapeDimensionInput.position(120, 100 + i * 30);
     lShapeDimensionInput.input(() => lShapeDimensions[i] = parseInt(lShapeDimensionInput.value()));
-    lShapeInputs.push(lShapeDimensionInput);
+    lShapeInputs.push({label: lShapeLabel, input: lShapeDimensionInput});
   }
 
   updateInputVisibility();
@@ -75,8 +78,9 @@ function updateInputVisibility() {
     item.input.style('display', shape === 'uShape' ? 'inline' : 'none');
     item.label.style('display', shape === 'uShape' ? 'inline' : 'none');
   }
-  for (let input of lShapeInputs) {
-    input.style('display', shape === 'lShape' ? 'inline' : 'none');
+  for (let item of lShapeInputs) {
+    item.input.style('display', shape === 'lShape' ? 'inline' : 'none');
+    item.label.style('display', shape === 'lShape' ? 'inline' : 'none');
   }
 }
 
@@ -103,12 +107,11 @@ function draw() {
     rect(x + uShapeDimensions[0] + uShapeDimensions[2], y, uShapeDimensions[4], uShapeDimensions[5]);
   } else if(shape === 'lShape') {
     let x = width / 2 - lShapeDimensions[0] / 2;
-    let y = height / 2 - lShapeDimensions[2] / 2;
-    rect(x, y, lShapeDimensions[0] * 2 / 3, lShapeDimensions[1]);
-    rect(x, y + lShapeDimensions[1], lShapeDimensions[0] / 3, lShapeDimensions[2] - lShapeDimensions[1]);
+    let y = height / 2 - (lShapeDimensions[1] + lShapeDimensions[3]) / 2;
+    rect(x, y + lShapeDimensions[3], lShapeDimensions[0], lShapeDimensions[1]);
+    rect(x, y, lShapeDimensions[2], lShapeDimensions[3]);
   }
 }
-
 
 
 
