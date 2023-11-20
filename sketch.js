@@ -1,12 +1,12 @@
 let shape = 'rectangle';
 let rectangleDimensions = [100, 100];
 let rectangleInputs = [];
-let tShapeDimensions = [50, 20, 50, 80, 25, 25]; // Added two more dimensions for the sides of the base
+let tShapeDimensions = [50, 20, 50, 20, 25]; // Adjusted tShape dimensions
 let tShapeInputs = [];
-let uShapeDimensions = [100, 50, 100]; // Added uShape dimensions
-let uShapeInputs = []; // Added uShape inputs
-let lShapeDimensions = [100, 50, 100]; // Added lShape dimensions
-let lShapeInputs = []; // Added lShape inputs
+let uShapeDimensions = [100, 50, 100];
+let uShapeInputs = [];
+let lShapeDimensions = [100, 50, 100];
+let lShapeInputs = [];
 
 function setup() {
   createCanvas(800, 600);
@@ -31,7 +31,7 @@ function setup() {
   }
 
   // Create input fields for tShape
-  let tShapeLabels = ['Base Height', 'Stem Width', 'Stem Height', 'Left Base Side', 'Right Base Side'];
+  let tShapeLabels = ['Base 1 Width', 'Stem Width', 'Stem Height', 'Base 2 Width', 'Base Height'];
   for (let i = 0; i < 5; i++) {
     let tShapeLabel = createElement('label', tShapeLabels[i]);
     tShapeLabel.position(10, 100 + i * 30);
@@ -86,10 +86,11 @@ function draw() {
     let y = height / 2 - rectangleDimensions[1] / 2;
     rect(x, y, rectangleDimensions[0], rectangleDimensions[1]);
   } else if(shape === 'tShape') {
-    let x = width / 2 - (tShapeDimensions[0] + tShapeDimensions[3] + tShapeDimensions[4]) / 2;
-    let y = height / 2 - (tShapeDimensions[1] + tShapeDimensions[2]) / 2;
-    rect(x, y, tShapeDimensions[0] + tShapeDimensions[3] + tShapeDimensions[4], tShapeDimensions[1]);
-    rect(x + tShapeDimensions[3], y + tShapeDimensions[1], tShapeDimensions[2], tShapeDimensions[3]);
+    let x = width / 2 - (tShapeDimensions[0] + tShapeDimensions[1] + tShapeDimensions[3]) / 2;
+    let y = height / 2 - (tShapeDimensions[2] + tShapeDimensions[4]) / 2;
+    rect(x, y + tShapeDimensions[2], tShapeDimensions[0], tShapeDimensions[4]);
+    rect(x + tShapeDimensions[0], y, tShapeDimensions[1], tShapeDimensions[2] + tShapeDimensions[4]);
+    rect(x + tShapeDimensions[0] + tShapeDimensions[1], y + tShapeDimensions[2], tShapeDimensions[3], tShapeDimensions[4]);
   } else if(shape === 'uShape') {
     let x = width / 2 - uShapeDimensions[0] / 2;
     let y = height / 2 - uShapeDimensions[2] / 2;
