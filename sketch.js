@@ -3,8 +3,8 @@ let rectangleDimensions = [100, 100];
 let rectangleInputs = [];
 let tShapeDimensions = [50, 20, 50, 20, 25]; // Adjusted tShape dimensions
 let tShapeInputs = [];
-let uShapeDimensions = [100, 50, 100];
-let uShapeInputs = [];
+let uShapeDimensions = [100, 100, 100, 50, 100, 100]; // Adjusted uShape dimensions
+let uShapeInputs = []; // Adjusted uShape inputs
 let lShapeDimensions = [100, 50, 100];
 let lShapeInputs = [];
 
@@ -42,11 +42,14 @@ function setup() {
   }
 
   // Create input fields for uShape
-  for (let i = 0; i < 3; i++) {
+  let uShapeLabels = ['Rectangle 1 Width', 'Rectangle 1 Height', 'Rectangle 2 Width', 'Rectangle 2 Height', 'Rectangle 3 Width', 'Rectangle 3 Height'];
+  for (let i = 0; i < 6; i++) {
+    let uShapeLabel = createElement('label', uShapeLabels[i]);
+    uShapeLabel.position(10, 100 + i * 30);
     let uShapeDimensionInput = createInput(uShapeDimensions[i].toString());
-    uShapeDimensionInput.position(10, 40 + i * 30);
+    uShapeDimensionInput.position(120, 100 + i * 30);
     uShapeDimensionInput.input(() => uShapeDimensions[i] = parseInt(uShapeDimensionInput.value()));
-    uShapeInputs.push(uShapeDimensionInput);
+    uShapeInputs.push({label: uShapeLabel, input: uShapeDimensionInput});
   }
 
   // Create input fields for lShape
@@ -68,8 +71,9 @@ function updateInputVisibility() {
     item.input.style('display', shape === 'tShape' ? 'inline' : 'none');
     item.label.style('display', shape === 'tShape' ? 'inline' : 'none');
   }
-  for (let input of uShapeInputs) {
-    input.style('display', shape === 'uShape' ? 'inline' : 'none');
+  for (let item of uShapeInputs) {
+    item.input.style('display', shape === 'uShape' ? 'inline' : 'none');
+    item.label.style('display', shape === 'uShape' ? 'inline' : 'none');
   }
   for (let input of lShapeInputs) {
     input.style('display', shape === 'lShape' ? 'inline' : 'none');
@@ -79,7 +83,7 @@ function updateInputVisibility() {
 function draw() {
   background(220);
   fill(255); // Set the fill color
-  stroke(255); // Set the stroke color to match the fill color
+  stroke(25); // Set the stroke color to match the fill color
 
   if(shape === 'rectangle') {
     let x = width / 2 - rectangleDimensions[0] / 2;
@@ -92,11 +96,11 @@ function draw() {
     rect(x + tShapeDimensions[0], y, tShapeDimensions[1], tShapeDimensions[2] + tShapeDimensions[4]);
     rect(x + tShapeDimensions[0] + tShapeDimensions[1], y + tShapeDimensions[2], tShapeDimensions[3], tShapeDimensions[4]);
   } else if(shape === 'uShape') {
-    let x = width / 2 - uShapeDimensions[0] / 2;
-    let y = height / 2 - uShapeDimensions[2] / 2;
-    rect(x, y, uShapeDimensions[0] / 3, uShapeDimensions[2]);
-    rect(x + uShapeDimensions[0] * 2 / 3, y, uShapeDimensions[0] / 3, uShapeDimensions[2]);
-    rect(x + uShapeDimensions[0] / 3, y, uShapeDimensions[0] / 3, uShapeDimensions[1]);
+    let x = width / 2 - (uShapeDimensions[0] + uShapeDimensions[2] + uShapeDimensions[4]) / 2;
+    let y = height / 2 - Math.max(uShapeDimensions[1], uShapeDimensions[3], uShapeDimensions[5]) / 2;
+    rect(x, y, uShapeDimensions[0], uShapeDimensions[1]);
+    rect(x + uShapeDimensions[0], y, uShapeDimensions[2], uShapeDimensions[3]);
+    rect(x + uShapeDimensions[0] + uShapeDimensions[2], y, uShapeDimensions[4], uShapeDimensions[5]);
   } else if(shape === 'lShape') {
     let x = width / 2 - lShapeDimensions[0] / 2;
     let y = height / 2 - lShapeDimensions[2] / 2;
