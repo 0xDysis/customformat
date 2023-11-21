@@ -9,6 +9,13 @@ let lShapeDimensions = [100, 50, 10, 100];
 let lShapeInputs = [];
 let hMirror = false;
 let vMirror = false;
+let zoom = 2;
+let zoomSpeed = 0.1;
+let offsetX = 0;
+let offsetY = 0;
+let dragging = false;
+let previousMouseX = 0;
+let previousMouseY = 0;
 
 function setup() {
   createCanvas(800, 600);
@@ -78,6 +85,17 @@ function setup() {
   vMirrorButton.mousePressed(() => {
     vMirror = !vMirror;
   });
+  let zoomInButton = createButton('+');
+  zoomInButton.position(10, 340);
+  zoomInButton.mousePressed(() => {
+    zoom += zoomSpeed;
+  });
+
+  let zoomOutButton = createButton('-');
+  zoomOutButton.position(40, 340);
+  zoomOutButton.mousePressed(() => {
+    zoom -= zoomSpeed;
+  });
 
   updateInputVisibility();
 }
@@ -102,11 +120,10 @@ function updateInputVisibility() {
 
 function draw() {
   background(220);
-  fill(255); // Set the fill color
-  stroke(255); // Set the stroke color to match the fill color
-
+  stroke(255)
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 + offsetX, height / 2 + offsetY); // Apply dragging
+  scale(zoom); // Apply zoom
   if (hMirror) {
     scale(-1, 1);
   }
@@ -139,5 +156,22 @@ function draw() {
 
   pop();
 }
+function mousePressed() {
+  dragging = true;
+  previousMouseX = mouseX;
+  previousMouseY = mouseY;
+}
 
+function mouseReleased() {
+  dragging = false;
+}
+
+function mouseDragged() {
+  if (dragging) {
+    offsetX += mouseX - previousMouseX;
+    offsetY += mouseY - previousMouseY;
+    previousMouseX = mouseX;
+    previousMouseY = mouseY;
+  }
+}
 
