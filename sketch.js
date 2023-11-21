@@ -144,6 +144,12 @@ for (let i = 0; i < 4; i++) {
   });
   uitsparingInputs.push({label: uitsparingLabel, input: uitsparingInput});
 }
+let clearUitsparingButton = createButton('Clear uitsparing');
+clearUitsparingButton.position(width - clearUitsparingButton.width - 10, 10);
+clearUitsparingButton.mousePressed(() => {
+  uitsparingen = []; // Clear the uitsparingen array
+  updateInputVisibility(); // Update the visibility of the input fields
+});
   updateInputVisibility();
 }
 
