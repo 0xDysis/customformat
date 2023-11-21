@@ -16,6 +16,9 @@ let offsetY = 0;
 let dragging = false;
 let previousMouseX = 0;
 let previousMouseY = 0;
+let uitsparingDimensions = [10, 10]; // Starting dimensions for the uitsparing
+let uitsparingPosition = [1, 1]; // Starting position for the uitsparing
+let uitsparingInputs = []; // Inputs for the uitsparing
 
 function setup() {
   createCanvas(800, 600);
@@ -96,7 +99,31 @@ function setup() {
   zoomOutButton.mousePressed(() => {
     zoom -= zoomSpeed;
   });
+// Create "uitsparing toevoegen" button
+let uitsparingButton = createButton('uitsparing toevoegen');
+uitsparingButton.position(10, 380);
+uitsparingButton.mousePressed(() => {
+  // Add functionality for creating a new uitsparing here
+  uitsparingDimensions = [10, 10];
+  uitsparingPosition = [1, 1];
+});
 
+// Create input fields for uitsparing
+let uitsparingLabels = ['Width', 'Height', 'X Position', 'Y Position'];
+for (let i = 0; i < 4; i++) {
+  let uitsparingLabel = createElement('label', uitsparingLabels[i]);
+  uitsparingLabel.position(10, 410 + i * 30);
+  let uitsparingInput = createInput(i < 2 ? uitsparingDimensions[i].toString() : uitsparingPosition[i-2].toString());
+  uitsparingInput.position(120, 410 + i * 30);
+  uitsparingInput.input(() => {
+    if (i < 2) {
+      uitsparingDimensions[i] = parseInt(uitsparingInput.value());
+    } else {
+      uitsparingPosition[i-2] = parseInt(uitsparingInput.value());
+    }
+  });
+  uitsparingInputs.push({label: uitsparingLabel, input: uitsparingInput});
+}
   updateInputVisibility();
 }
 
@@ -116,11 +143,35 @@ function updateInputVisibility() {
     item.input.style('display', shape === 'lShape' ? 'inline' : 'none');
     item.label.style('display', shape === 'lShape' ? 'inline' : 'none');
   }
+  for (let item of uitsparingInputs) {
+    item.input.style('display', 'inline');
+    item.label.style('display', 'inline');
+  }
+}
+function drawUitsparing() {
+  // Calculate the starting position of the uitsparing based on the current shape
+  let ux, uy;
+  if(shape === 'rectangle') {
+    ux = -rectangleDimensions[0] / 2 + uitsparingPosition[0];
+    uy = rectangleDimensions[1] / 2 - uitsparingDimensions[1] - uitsparingPosition[1];
+  } else if(shape === 'tShape') {
+    ux = -(tShapeDimensions[0] + tShapeDimensions[1] + tShapeDimensions[3]) / 2 + uitsparingPosition[0];
+    uy = (tShapeDimensions[2] + tShapeDimensions[4]) / 2 - uitsparingDimensions[1] - uitsparingPosition[1];
+  } else if(shape === 'uShape') {
+    ux = -(uShapeDimensions[0] + uShapeDimensions[2] + uShapeDimensions[4]) / 2 + uitsparingPosition[0];
+    uy = Math.max(uShapeDimensions[1], uShapeDimensions[3], uShapeDimensions[5]) / 2 - uitsparingDimensions[1] - uitsparingPosition[1];
+  } else if(shape === 'lShape') {
+    ux = -lShapeDimensions[0] / 2 + uitsparingPosition[0];
+    uy = (lShapeDimensions[1] + lShapeDimensions[3]) / 2 - uitsparingDimensions[1] - uitsparingPosition[1];
+  }
+
+  // Draw the uitsparing
+  rect(ux, uy, uitsparingDimensions[0], uitsparingDimensions[1]);
 }
 
 function draw() {
   background(220);
-  stroke(255)
+  stroke(25)
   push();
   translate(width / 2 + offsetX, height / 2 + offsetY); // Apply dragging
   scale(zoom); // Apply zoom
@@ -135,6 +186,7 @@ function draw() {
     let x = -rectangleDimensions[0] / 2;
     let y = -rectangleDimensions[1] / 2;
     rect(x, y, rectangleDimensions[0], rectangleDimensions[1]);
+        
   } else if(shape === 'tShape') {
     let x = -(tShapeDimensions[0] + tShapeDimensions[1] + tShapeDimensions[3]) / 2;
     let y = -(tShapeDimensions[2] + tShapeDimensions[4]) / 2;
@@ -153,6 +205,9 @@ function draw() {
     rect(x, y + lShapeDimensions[3], lShapeDimensions[0], lShapeDimensions[1]);
     rect(x, y, lShapeDimensions[2], lShapeDimensions[3]);
   }
+  
+  stroke(0); // Set the stroke color to black
+  drawUitsparing();
 
   pop();
 }
@@ -174,4 +229,5 @@ function mouseDragged() {
     previousMouseY = mouseY;
   }
 }
+
 
