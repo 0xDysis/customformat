@@ -30,6 +30,7 @@ function setup() {
   shapeSelector.option('tShape');
   shapeSelector.option('uShape');
   shapeSelector.option('lShape');
+  shapeSelector.class('shape-selector');
   shapeSelector.changed(() => {
     shape = shapeSelector.value();
     updateInputVisibility();
@@ -39,6 +40,7 @@ function setup() {
   for (let i = 0; i < 2; i++) {
     let rectangleDimensionInput = createInput(rectangleDimensions[i].toString());
     rectangleDimensionInput.position(10, 40 + i * 30);
+    rectangleDimensionInput.class('rectangle-input');
     rectangleDimensionInput.input(() => rectangleDimensions[i] = parseInt(rectangleDimensionInput.value()));
     rectangleInputs.push(rectangleDimensionInput);
   }
@@ -48,8 +50,10 @@ function setup() {
   for (let i = 0; i < 5; i++) {
     let tShapeLabel = createElement('label', tShapeLabels[i]);
     tShapeLabel.position(10, 100 + i * 30);
+    tShapeLabel.class('tshape-label');
     let tShapeDimensionInput = createInput(tShapeDimensions[i].toString());
     tShapeDimensionInput.position(120, 100 + i * 30);
+    tShapeDimensionInput.class('tshape-input');
     tShapeDimensionInput.input(() => tShapeDimensions[i] = parseInt(tShapeDimensionInput.value()));
     tShapeInputs.push({label: tShapeLabel, input: tShapeDimensionInput});
   }
@@ -59,8 +63,10 @@ function setup() {
   for (let i = 0; i < 6; i++) {
     let uShapeLabel = createElement('label', uShapeLabels[i]);
     uShapeLabel.position(10, 100 + i * 30);
+    uShapeLabel.class('ushape-label');
     let uShapeDimensionInput = createInput(uShapeDimensions[i].toString());
     uShapeDimensionInput.position(120, 100 + i * 30);
+    uShapeDimensionInput.class('ushape-input');
     uShapeDimensionInput.input(() => uShapeDimensions[i] = parseInt(uShapeDimensionInput.value()));
     uShapeInputs.push({label: uShapeLabel, input: uShapeDimensionInput});
   }
@@ -70,8 +76,10 @@ function setup() {
   for (let i = 0; i < 4; i++) {
     let lShapeLabel = createElement('label', lShapeLabels[i]);
     lShapeLabel.position(10, 100 + i * 30);
+    lShapeLabel.class('lshape-label');
     let lShapeDimensionInput = createInput(lShapeDimensions[i].toString());
     lShapeDimensionInput.position(120, 100 + i * 30);
+    lShapeDimensionInput.class('lshape-input');
     lShapeDimensionInput.input(() => lShapeDimensions[i] = parseInt(lShapeDimensionInput.value()));
     lShapeInputs.push({label: lShapeLabel, input: lShapeDimensionInput});
   }
@@ -79,6 +87,7 @@ function setup() {
   // Create horizontal mirror button
   let hMirrorButton = createButton('Mirror Horizontally');
   hMirrorButton.position(10, 300);
+  hMirrorButton.class('hmirror-button');
   hMirrorButton.mousePressed(() => {
     hMirror = !hMirror;
   });
@@ -86,70 +95,81 @@ function setup() {
   // Create vertical mirror button
   let vMirrorButton = createButton('Mirror Vertically');
   vMirrorButton.position(130, 300);
+  vMirrorButton.class('vmirror-button');
   vMirrorButton.mousePressed(() => {
     vMirror = !vMirror;
   });
+
   let zoomInButton = createButton('+');
   zoomInButton.position(10, 340);
+  zoomInButton.class('zoomin-button');
   zoomInButton.mousePressed(() => {
     zoom += zoomSpeed;
   });
 
   let zoomOutButton = createButton('-');
   zoomOutButton.position(40, 340);
+  zoomOutButton.class('zoomout-button');
   zoomOutButton.mousePressed(() => {
     zoom -= zoomSpeed;
   });
-// Create "uitsparing toevoegen" button
-let uitsparingButton = createButton('uitsparing toevoegen');
-uitsparingButton.position(10, 380);
-uitsparingButton.mousePressed(() => {
-  // Create a new uitsparing with default dimensions and position
-  let newUitsparing = {
-    dimensions: [10, 10],
-    position: [1, 1],
-  };
 
-  // Add the new uitsparing to the array
-  uitsparingen.push(newUitsparing);
+  // Create "uitsparing toevoegen" button
+  let uitsparingButton = createButton('uitsparing toevoegen');
+  uitsparingButton.position(10, 380);
+  uitsparingButton.class('uitsparing-button');
+  uitsparingButton.mousePressed(() => {
+    // Create a new uitsparing with default dimensions and position
+    let newUitsparing = {
+      dimensions: [10, 10],
+      position: [1, 1],
+    };
 
-  // Update the input fields to control the new uitsparing
-  for (let i = 0; i < 4; i++) {
-    let uitsparingInput = uitsparingInputs[i].input;
-    if (i < 2) {
-      uitsparingInput.value(newUitsparing.dimensions[i]);
-    } else {
-      uitsparingInput.value(newUitsparing.position[i - 2]);
+    // Add the new uitsparing to the array
+    uitsparingen.push(newUitsparing);
+
+    // Update the input fields to control the new uitsparing
+    for (let i = 0; i < 4; i++) {
+      let uitsparingInput = uitsparingInputs[i].input;
+      if (i < 2) {
+        uitsparingInput.value(newUitsparing.dimensions[i]);
+      } else {
+        uitsparingInput.value(newUitsparing.position[i - 2]);
+      }
     }
-  }
-  updateInputVisibility();
-});
-
-// Create input fields for uitsparing
-let uitsparingLabels = ['Width', 'Height', 'X Position', 'Y Position'];
-for (let i = 0; i < 4; i++) {
-  let uitsparingLabel = createElement('label', uitsparingLabels[i]);
-  uitsparingLabel.position(10, 410 + i * 30);
-  let uitsparingInput = createInput(i < 2 ? uitsparingDimensions[i].toString() : uitsparingPosition[i-2].toString());
-  uitsparingInput.position(120, 410 + i * 30);
-  uitsparingInput.input(() => {
-    if (uitsparingen.length === 0) return; // No uitsparing to control
-  
-    let lastUitsparing = uitsparingen[uitsparingen.length - 1];
-    if (i < 2) {
-      lastUitsparing.dimensions[i] = parseInt(uitsparingInput.value());
-    } else {
-      lastUitsparing.position[i - 2] = parseInt(uitsparingInput.value());
-    }
+    updateInputVisibility();
   });
-  uitsparingInputs.push({label: uitsparingLabel, input: uitsparingInput});
-}
-let clearUitsparingButton = createButton('Clear uitsparing');
-clearUitsparingButton.position(width - clearUitsparingButton.width - 10, 10);
-clearUitsparingButton.mousePressed(() => {
-  uitsparingen = []; // Clear the uitsparingen array
-  updateInputVisibility(); // Update the visibility of the input fields
-});
+
+  // Create input fields for uitsparing
+  let uitsparingLabels = ['Width', 'Height', 'X Position', 'Y Position'];
+  for (let i = 0; i < 4; i++) {
+    let uitsparingLabel = createElement('label', uitsparingLabels[i]);
+    uitsparingLabel.position(10, 410 + i * 30);
+    uitsparingLabel.class('uitsparing-label');
+    let uitsparingInput = createInput(i < 2 ? uitsparingDimensions[i].toString() : uitsparingPosition[i-2].toString());
+    uitsparingInput.position(120, 410 + i * 30);
+    uitsparingInput.class('uitsparing-input');
+    uitsparingInput.input(() => {
+      if (uitsparingen.length === 0) return; // No uitsparing to control
+    
+      let lastUitsparing = uitsparingen[uitsparingen.length - 1];
+      if (i < 2) {
+        lastUitsparing.dimensions[i] = parseInt(uitsparingInput.value());
+      } else {
+        lastUitsparing.position[i - 2] = parseInt(uitsparingInput.value());
+      }
+    });
+    uitsparingInputs.push({label: uitsparingLabel, input: uitsparingInput});
+  }
+
+  let clearUitsparingButton = createButton('Clear uitsparing');
+  clearUitsparingButton.position(width - clearUitsparingButton.width - 10, 10);
+  clearUitsparingButton.class('clear-uitsparing-button');
+  clearUitsparingButton.mousePressed(() => {
+    uitsparingen = []; // Clear the uitsparingen array
+    updateInputVisibility(); // Update the visibility of the input fields
+  });
+
   updateInputVisibility();
 }
 

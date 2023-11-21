@@ -1,0 +1,102 @@
+/* Style for shape selector dropdown */
+.shape-selector {
+    font-size: 16px;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+   
+  }
+  
+  .rectangle-input {
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 100px 0; /* This adds a 10px margin to the top and bottom of the element */
+  }
+  
+  /* Style for tShape labels and input fields */
+  .tshape-label,
+  .tshape-input {
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  /* Style for uShape labels and input fields */
+  .ushape-label,
+  .ushape-input {
+    font-size: 13px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  /* Style for lShape labels and input fields */
+  .lshape-label,
+  .lshape-input {
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  /* Style for mirror buttons */
+  .hmirror-button,
+  .vmirror-button {
+    font-size: 12px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #000000; /* Green */
+    color: white;
+    border: none;
+    cursor: pointer;
+    
+  }
+  
+  /* Style for zoom buttons */
+  .zoomin-button,
+  .zoomout-button {
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #010101; /* Blue */
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Style for uitsparing button */
+.uitsparing-button {
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #010101; 
+    color: #fffbfb;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Style for uitsparing label */
+  .uitsparing-label {
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    /* Add any other styles you want for the label here */
+  }
+  
+  /* Style for uitsparing input fields */
+  .uitsparing-input {
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    /* Add any other styles you want for the input fields here */
+  }
+  
+  /* Style for clear uitsparing button */
+  .clear-uitsparing-button {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f44336; /* Red */
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
