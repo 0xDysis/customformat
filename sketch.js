@@ -19,6 +19,7 @@ let previousMouseY = 0;
 let uitsparingDimensions = [10, 10]; // Starting dimensions for the uitsparing
 let uitsparingPosition = [1, 1]; // Starting position for the uitsparing
 let uitsparingInputs = []; // Inputs for the uitsparing
+let uitsparingen = []; // Array to store multiple uitsparingen
 
 function setup() {
   createCanvas(800, 600);
@@ -103,9 +104,25 @@ function setup() {
 let uitsparingButton = createButton('uitsparing toevoegen');
 uitsparingButton.position(10, 380);
 uitsparingButton.mousePressed(() => {
-  // Add functionality for creating a new uitsparing here
-  uitsparingDimensions = [10, 10];
-  uitsparingPosition = [1, 1];
+  // Create a new uitsparing with default dimensions and position
+  let newUitsparing = {
+    dimensions: [10, 10],
+    position: [1, 1],
+  };
+
+  // Add the new uitsparing to the array
+  uitsparingen.push(newUitsparing);
+
+  // Update the input fields to control the new uitsparing
+  for (let i = 0; i < 4; i++) {
+    let uitsparingInput = uitsparingInputs[i].input;
+    if (i < 2) {
+      uitsparingInput.value(newUitsparing.dimensions[i]);
+    } else {
+      uitsparingInput.value(newUitsparing.position[i - 2]);
+    }
+  }
+  updateInputVisibility();
 });
 
 // Create input fields for uitsparing
@@ -116,10 +133,13 @@ for (let i = 0; i < 4; i++) {
   let uitsparingInput = createInput(i < 2 ? uitsparingDimensions[i].toString() : uitsparingPosition[i-2].toString());
   uitsparingInput.position(120, 410 + i * 30);
   uitsparingInput.input(() => {
+    if (uitsparingen.length === 0) return; // No uitsparing to control
+  
+    let lastUitsparing = uitsparingen[uitsparingen.length - 1];
     if (i < 2) {
-      uitsparingDimensions[i] = parseInt(uitsparingInput.value());
+      lastUitsparing.dimensions[i] = parseInt(uitsparingInput.value());
     } else {
-      uitsparingPosition[i-2] = parseInt(uitsparingInput.value());
+      lastUitsparing.position[i - 2] = parseInt(uitsparingInput.value());
     }
   });
   uitsparingInputs.push({label: uitsparingLabel, input: uitsparingInput});
@@ -144,34 +164,35 @@ function updateInputVisibility() {
     item.label.style('display', shape === 'lShape' ? 'inline' : 'none');
   }
   for (let item of uitsparingInputs) {
-    item.input.style('display', 'inline');
-    item.label.style('display', 'inline');
+    item.input.style('display', uitsparingen.length > 0 ? 'inline' : 'none');
+    item.label.style('display', uitsparingen.length > 0 ? 'inline' : 'none');
   }
 }
 function drawUitsparing() {
-  // Calculate the starting position of the uitsparing based on the current shape
-  let ux, uy;
-  if(shape === 'rectangle') {
-    ux = -rectangleDimensions[0] / 2 + uitsparingPosition[0];
-    uy = rectangleDimensions[1] / 2 - uitsparingDimensions[1] - uitsparingPosition[1];
-  } else if(shape === 'tShape') {
-    ux = -(tShapeDimensions[0] + tShapeDimensions[1] + tShapeDimensions[3]) / 2 + uitsparingPosition[0];
-    uy = (tShapeDimensions[2] + tShapeDimensions[4]) / 2 - uitsparingDimensions[1] - uitsparingPosition[1];
-  } else if(shape === 'uShape') {
-    ux = -(uShapeDimensions[0] + uShapeDimensions[2] + uShapeDimensions[4]) / 2 + uitsparingPosition[0];
-    uy = Math.max(uShapeDimensions[1], uShapeDimensions[3], uShapeDimensions[5]) / 2 - uitsparingDimensions[1] - uitsparingPosition[1];
-  } else if(shape === 'lShape') {
-    ux = -lShapeDimensions[0] / 2 + uitsparingPosition[0];
-    uy = (lShapeDimensions[1] + lShapeDimensions[3]) / 2 - uitsparingDimensions[1] - uitsparingPosition[1];
+  for (let uitsparing of uitsparingen) {
+    // Calculate the starting position of the uitsparing based on the current shape
+    let ux, uy;
+    if(shape === 'rectangle') {
+      ux = -rectangleDimensions[0] / 2 + uitsparing.position[0];
+      uy = rectangleDimensions[1] / 2 - uitsparing.dimensions[1] - uitsparing.position[1];
+    } else if(shape === 'tShape') {
+      ux = -(tShapeDimensions[0] + tShapeDimensions[1] + tShapeDimensions[3]) / 2 + uitsparing.position[0];
+      uy = (tShapeDimensions[2] + tShapeDimensions[4]) / 2 - uitsparing.dimensions[1] - uitsparing.position[1];
+    } else if(shape === 'uShape') {
+      ux = -(uShapeDimensions[0] + uShapeDimensions[2] + uShapeDimensions[4]) / 2 + uitsparing.position[0];
+      uy = Math.max(uShapeDimensions[1], uShapeDimensions[3], uShapeDimensions[5]) / 2 - uitsparing.dimensions[1] - uitsparing.position[1];
+    } else if(shape === 'lShape') {
+      ux = -lShapeDimensions[0] / 2 + uitsparing.position[0];
+      uy = (lShapeDimensions[1] + lShapeDimensions[3]) / 2 - uitsparing.dimensions[1] - uitsparing.position[1];
+    }
+
+    // Draw the uitsparing
+    rect(ux, uy, uitsparing.dimensions[0], uitsparing.dimensions[1]);
   }
-
-  // Draw the uitsparing
-  rect(ux, uy, uitsparingDimensions[0], uitsparingDimensions[1]);
 }
-
 function draw() {
   background(220);
-  stroke(25)
+  stroke(255)
   push();
   translate(width / 2 + offsetX, height / 2 + offsetY); // Apply dragging
   scale(zoom); // Apply zoom
